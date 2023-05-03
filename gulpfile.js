@@ -3,7 +3,6 @@ const sass = require("gulp-sass")(require("sass"));
 const cleanCSS = require("gulp-clean-css");
 const del = require("del");
 const pug = require("gulp-pug");
-const imagemin = require("gulp-imagemin");
 const uglify = require("gulp-uglify");
 
 // clean css style before updating style
