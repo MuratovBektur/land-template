@@ -5,19 +5,22 @@
   "main": "index.js",
   "scripts": {
     "build": "gulp",
-    "dev": "gulp watch"
+    "dev": "concurrently \"gulp watch\" \"node live-server.js\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "concurrently": "^8.0.1",
     "del": "^6.1.1",
     "gulp": "^4.0.2",
     "gulp-clean-css": "^4.3.0",
+    "gulp-data": "^1.3.1",
     "gulp-imagemin": "^7.1.0",
     "gulp-pug": "^5.0.0",
     "gulp-sass": "^5.1.0",
     "gulp-uglify": "^3.0.2",
+    "live-server": "^1.2.2",
     "sass": "^1.62.0"
   }
 }

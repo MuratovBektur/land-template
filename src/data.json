@@ -1,0 +1,9 @@
+{
+  "title": "Our Awesome Website",
+  "links": [
+      "Link 1",
+      "Link 2",
+      "Link 3"
+  ],
+  "message": "Hello World!"
+}

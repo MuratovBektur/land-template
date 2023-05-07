@@ -3,8 +3,11 @@ const sass = require("gulp-sass")(require("sass"));
 const cleanCSS = require("gulp-clean-css");
 const del = require("del");
 const pug = require("gulp-pug");
-const imagemin = require("gulp-imagemin");
 const uglify = require("gulp-uglify");
+const data = require("gulp-data");
+const fs = require("fs");
+
+const dataJsonPath = "src/data.json";
 
 // clean css style before updating style
 gulp.task("clean", function () {
@@ -30,10 +33,14 @@ gulp.task("script", () =>
     .pipe(uglify())
     .pipe(gulp.dest("dist/assets/script"))
 );
-
 gulp.task("pug", () =>
   gulp
     .src("src/pug/index.pug")
+    .pipe(
+      data(function () {
+        return JSON.parse(fs.readFileSync(dataJsonPath));
+      })
+    )
     .pipe(
       pug({
         pretty: true,
@@ -53,6 +60,9 @@ gulp.task("watch", () => {
     gulp.series(["script"])(done);
   });
   gulp.watch("src/pug/*.pug", (done) => {
+    gulp.series(["pug"])(done);
+  });
+  gulp.watch(dataJsonPath, (done) => {
     gulp.series(["pug"])(done);
   });
 });
