@@ -53,7 +53,7 @@ gulp.task("watch", () => {
   gulp.watch("src/scss/*.scss", (done) => {
     gulp.series(["clean", "styles"])(done);
   });
-  gulp.watch("src/img/*", (done) => {
+  gulp.watch("src/images/*", (done) => {
     gulp.series(["copy-img"])(done);
   });
   gulp.watch("src/script/*.js", (done) => {
