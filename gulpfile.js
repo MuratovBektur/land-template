@@ -23,7 +23,7 @@ gulp.task("styles", () =>
 );
 
 gulp.task("copy-img", function () {
-  return gulp.src("src/img/*").pipe(gulp.dest("dist/assets/img"));
+  return gulp.src("src/images/*").pipe(gulp.dest("dist/assets/images"));
 });
 
 // Minifying JS files
