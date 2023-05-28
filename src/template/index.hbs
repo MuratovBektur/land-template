@@ -8,8 +8,12 @@
     <link rel="stylesheet" href="./assets/style/main.css">
   </head>
   <body>
-    <span>#{title}<span>
-    <div id="main">#{message}</div>
+    {{> header}}
+    <div title="{{capitals message}}">{{title}}</div>
+     {{#each links}}
+        <div>{{this}}</div>
+    {{/each}}
+    {{objects.key1}}
+    {{> footer}}
   </body>
-  include test.pug
 </html>

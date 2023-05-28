@@ -2,9 +2,8 @@ const gulp = require("gulp");
 const sass = require("gulp-sass")(require("sass"));
 const cleanCSS = require("gulp-clean-css");
 const del = require("del");
-const pug = require("gulp-pug");
-const uglify = require("gulp-uglify");
-const data = require("gulp-data");
+const handlebars = require("gulp-compile-handlebars");
+const rename = require("gulp-rename");
 const fs = require("fs");
 
 const dataJsonPath = "src/data.json";
@@ -23,51 +22,70 @@ gulp.task("styles", () =>
 );
 
 gulp.task("copy-img", function () {
-  return gulp.src("src/images/*").pipe(gulp.dest("dist/assets/images"));
+  return gulp.src("src/images/**/*").pipe(gulp.dest("dist/assets/images"));
 });
 
-// Minifying JS files
-gulp.task("script", () =>
-  gulp
-    .src("src/script/*.js")
-    .pipe(uglify())
-    .pipe(gulp.dest("dist/assets/script"))
+gulp.task("copy-js", () =>
+  gulp.src("src/script/*.js").pipe(gulp.dest("dist/assets/script"))
 );
-gulp.task("pug", () =>
-  gulp
-    .src("src/pug/index.pug")
-    .pipe(
-      data(function () {
-        return JSON.parse(fs.readFileSync(dataJsonPath));
-      })
-    )
-    .pipe(
-      pug({
-        pretty: true,
-      })
-    )
-    .pipe(gulp.dest("dist"))
-);
+gulp.task("copy-doc", function () {
+  return gulp.src("src/doc/*").pipe(gulp.dest("dist/assets/doc"));
+});
+gulp.task("template", () => {
+  const templateData = JSON.parse(fs.readFileSync(dataJsonPath));
+
+  const templateOptions = {
+    ignorePartials: true,
+    partials: {
+      footer: "<footer>the end</footer>",
+    },
+    batch: ["./src/template/partials"],
+    helpers: {
+      currentYear: function () {
+        return new Date().getFullYear();
+      },
+      capitals: function (str) {
+        return str.toUpperCase();
+      },
+    },
+  };
+
+  return gulp
+    .src("src/template/index.hbs")
+    .pipe(handlebars(templateData, templateOptions))
+    .pipe(rename("index.html"))
+    .pipe(gulp.dest("dist"));
+});
 
 gulp.task("watch", () => {
   gulp.watch("src/scss/*.scss", (done) => {
     gulp.series(["clean", "styles"])(done);
   });
-  gulp.watch("src/images/*", (done) => {
+  gulp.watch("src/images/**/*", (done) => {
     gulp.series(["copy-img"])(done);
   });
   gulp.watch("src/script/*.js", (done) => {
-    gulp.series(["script"])(done);
+    gulp.series(["copy-js"])(done);
   });
-  gulp.watch("src/pug/*.pug", (done) => {
-    gulp.series(["pug"])(done);
+  gulp.watch("src/doc/*", (done) => {
+    gulp.series(["copy-doc"])(done);
+  });
+  gulp.watch("src/template/**/*", (done) => {
+    gulp.series(["template"])(done);
   });
   gulp.watch(dataJsonPath, (done) => {
-    gulp.series(["pug"])(done);
+    gulp.series(["template"])(done);
   });
 });
 
 gulp.task(
   "default",
-  gulp.series(["clean", "styles", "copy-img", "script", "pug"])
+  gulp.series([
+    "clean",
+    "styles",
+    "copy-img",
+    "copy-js",
+    "copy-doc",
+    "template",
+  ])
 );
