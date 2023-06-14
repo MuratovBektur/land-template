@@ -31,8 +31,16 @@ gulp.task("template", () => {
     },
     batch: ["./src/template/partials"],
     helpers: {
-      currentYear: function () {
-        return new Date().getFullYear();
+      math: function (lvalue, operator, rvalue) {
+        lvalue = parseFloat(lvalue);
+        rvalue = parseFloat(rvalue);
+        return {
+          "+": lvalue + rvalue,
+          "-": lvalue - rvalue,
+          "*": lvalue * rvalue,
+          "/": lvalue / rvalue,
+          "%": lvalue % rvalue,
+        }[operator];
       },
       capitals: function (str) {
         return str.toUpperCase();

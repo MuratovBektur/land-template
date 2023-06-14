@@ -7,6 +7,7 @@ const rename = require("gulp-rename");
 const fs = require("fs");
 const replace = require("gulp-replace");
 const beautify = require("gulp-jsbeautifier");
+const strip = require("gulp-strip-comments");
 
 const dataJsonPath = "src/data.json";
 
@@ -40,6 +41,7 @@ gulp.task("copy-img", function () {
 gulp.task("copy-js", function () {
   return gulp
     .src("src/script/*.js")
+    .pipe(strip())
     .pipe(gulp.dest(`${distFolder}/assets/script`));
 });
 gulp.task("copy-doc", function () {
@@ -54,16 +56,24 @@ gulp.task("template", () => {
 
   const templateOptions = {
     ignorePartials: true,
-    partials: {
-      footer: "<footer>the end</footer>",
-    },
     batch: ["./src/template/partials"],
     helpers: {
-      currentYear: function () {
-        return new Date().getFullYear();
+      math: function (lvalue, operator, rvalue) {
+        lvalue = parseFloat(lvalue);
+        rvalue = parseFloat(rvalue);
+        return {
+          "+": lvalue + rvalue,
+          "-": lvalue - rvalue,
+          "*": lvalue * rvalue,
+          "/": lvalue / rvalue,
+          "%": lvalue % rvalue,
+        }[operator];
       },
       capitals: function (str) {
         return str.toUpperCase();
+      },
+      ifEquals: function (arg1, arg2, options) {
+        return arg1 == arg2 ? options.fn(this) : options.inverse(this);
       },
     },
   };
@@ -76,7 +86,7 @@ gulp.task("template", () => {
         path.extname = ".html";
       })
     )
-    .pipe(replace('<div class="gulp-content"></div>', "{{@content}}"))
+    .pipe(replace('<div class="template-content"></div>', "{{@content}}"))
     .pipe(replace('<div class="payment-start"></div>', "{{@payment}}"))
     .pipe(replace('<div class="payment-end"></div>', "{{@end-payment}}"))
     .pipe(gulp.dest(`${distFolder}/`));

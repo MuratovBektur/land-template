@@ -25,5 +25,8 @@
     "gulp-sass": "^5.1.0",
     "live-server": "^1.2.2",
     "sass": "^1.62.0"
+  },
+  "dependencies": {
+    "gulp-strip-comments": "^2.5.2"
   }
 }

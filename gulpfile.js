@@ -36,16 +36,24 @@ gulp.task("template", () => {
 
   const templateOptions = {
     ignorePartials: true,
-    partials: {
-      footer: "<footer>the end</footer>",
-    },
     batch: ["./src/template/partials"],
     helpers: {
-      currentYear: function () {
-        return new Date().getFullYear();
+      math: function (lvalue, operator, rvalue) {
+        lvalue = parseFloat(lvalue);
+        rvalue = parseFloat(rvalue);
+        return {
+          "+": lvalue + rvalue,
+          "-": lvalue - rvalue,
+          "*": lvalue * rvalue,
+          "/": lvalue / rvalue,
+          "%": lvalue % rvalue,
+        }[operator];
       },
       capitals: function (str) {
         return str.toUpperCase();
+      },
+      ifEquals: function (arg1, arg2, options) {
+        return arg1 == arg2 ? options.fn(this) : options.inverse(this);
       },
     },
   };
