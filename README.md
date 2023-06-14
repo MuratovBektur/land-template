@@ -1,11 +1,16 @@
 ## Запуск проекта в режиме разработки
 
 ```bash
-  npm run dev
+  yarn dev
 ```
 
-## Сборка проекта
+## Сборка проекта для ftp
 
 ```bash
-  npm run build
+  yarn build-ftp
+```
+## Сборка проекта для course
+
+```bash
+  yarn build-course
 ```

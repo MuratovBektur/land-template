@@ -42,20 +42,21 @@ gulp.task("template", () => {
           "%": lvalue % rvalue,
         }[operator];
       },
-      capitals: function (str) {
-        return str.toUpperCase();
+      ifEquals: function (arg1, arg2, options) {
+        return arg1 == arg2 ? options.fn(this) : options.inverse(this);
       },
     },
   };
 
   return gulp
-    .src("src/template/index.hbs")
+    .src("src/template/course/index.hbs")
     .pipe(handlebars(templateData, templateOptions))
     .pipe(rename("index.html"))
     .pipe(
       replace(/<img.*?src="(.*?)".*\/>/g, function handleReplace(s) {
         const src = s.replace(/.*src="([^"]*)".*/, "$1");
-        return s.replace(src, `inline(${src})`).replace("./assets", "../");
+        if (!src) return s;
+        return s.replace(src, `inline(${src})`).replace("./assets", "../..");
       })
     )
     .pipe(
@@ -65,7 +66,7 @@ gulp.task("template", () => {
       })
     )
     .pipe(
-      replace(/<link.*?href="(.*?)">/g, function handleReplace(s) {
+      replace(/<link.*?href="(.*?)".*?>/g, function handleReplace(s) {
         const src = s.replace(/.*href="([^"]*)".*/, "$1");
         const filename = src.replace(
           "./assets/style",
@@ -80,7 +81,9 @@ gulp.task("template", () => {
       replace(/<script.*?src="(.*?)"><\/script>/g, function handleReplace(s) {
         const src = s.replace(/.*src="([^"]*)".*/, "$1");
         const filename = src.replace("./assets/script", "src/script");
-        const script = fs.readFileSync(filename, "utf8");
+        let script = fs.readFileSync(filename, "utf8");
+        // remove all comments
+        script = script.replaceAll(/\/\/.*?\n/g, "");
         const scriptTag = `<script defer> ${script} </script>`;
         return scriptTag;
       })

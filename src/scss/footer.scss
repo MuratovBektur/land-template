@@ -1,5 +1,6 @@
-$dekstopWidth: 700px;
 .footer {
+  $dekstopWidth: 700px;
+
   background-color: $black;
   color: white;
   font-family: Inter;
@@ -94,3 +95,7 @@ $dekstopWidth: 700px;
     }
   }
 }
+
+// .footer {
+//   color: red;
+// }
