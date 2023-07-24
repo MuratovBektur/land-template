@@ -1,48 +1,70 @@
 <footer class="footer">
   <div class="footer__content">
-    <div class="footer__content-item footer__left-menu">
-      {{#each footer.leftMenuItems}}
-        <div class="footer__left-menu-item">
-          <img src="./assets/images/footer/{{this.img}}" />
-          <div>
-            {{#each this.links}}
-              {{#ifEquals this.type "text"}}
-                <div
-                  class="footer__left-menu-link {{this.class}}"
-                >{{this.text}}</div>
-              {{/ifEquals}}
-              {{#ifEquals this.type "link"}}
-                <div
-                  class="footer__left-menu-link {{this.class}}"
-                  target="_blank"
-                  href="{{this.href}}"
-                >{{this.text}}</div>
-              {{/ifEquals}}
-            {{/each}}
-          </div>
-        </div>
-      {{/each}}
-    </div>
-    <div class="footer__content-item footer__middle-menu">
+    <div class="footer__content-item footer__logo-container">
       <img
-        class="footer__middle-menu-img script_logo"
+        class="footer__logo-img script_logo"
         src="\{{!logo_file}}"
         alt="logo"
       />
-      <div>© 2023 Copyright</div>
+      <div class="footer__logo-footer">© 2023 Copyright</div>
+      <div class="footer__desktop footer__logo-bottom">
+        <img src="assets/images/footer/mir-logo.svg" alt="logo" />
+        <img src="assets/images/footer/mir-accept.png" alt="logo" />
+      </div>
     </div>
-    <div class="footer__content-item footer__right-menu">
-      <div class="footer__right-menu-content">
-        {{#each footer.rightMenuItems}}
-          <div class="footer__right-menu-item">
-            <a
-              class="footer__right-menu-link {{this.class}}"
-              target="_blank"
-              href="{{this.href}}"
-            >{{this.text}}</a>
+    <div class="footer__content-item footer__info-container">
+      <div class="footer__content-item-header">информация</div>
+      <div class="footer__info-column-container">
+        {{#each footer.infoMenuItems}}
+          <div class="footer__info-column">
+            {{#each this}}
+              <a
+                class="footer__content-item-link footer__info-link
+                  {{this.class}}"
+                href="{{this.href}}"
+                target="_blank"
+              >
+                {{this.text}}
+              </a>
+            {{/each}}
           </div>
+
         {{/each}}
       </div>
+    </div>
+    <div class="footer__content-item footer__about-container">
+      <div class="footer__content-item-header">о компании</div>
+      <div class="footer__about-link-container">
+        {{#each footer.aboutCompanyMenuItems}}
+          <div class="footer__about-link {{this.class}}">{{this.text}}</div>
+        {{/each}}
+      </div>
+    </div>
+    <div class="footer__content-item footer__contacts-container">
+      <div class="footer__content-item-header">Контакты</div>
+      {{#each footer.contactsMenuItems}}
+        <div class="footer__contacts-link-container">
+          {{#if this.img}}
+            <img
+              class="footer__contacts-link-img"
+              src="./assets/images/footer/{{this.img}}"
+            />
+          {{/if}}
+          <a
+            class="footer__content-item-link footer__contacts-link
+              {{this.class}}"
+            target="_blank"
+            href="{{this.href}}"
+          >
+            {{this.text}}
+          </a>
+        </div>
+      {{/each}}
+    </div>
+    <div class="footer__copyright-container">© 2023 Copyright</div>
+    <div class="footer__mobile footer__logo-bottom">
+      <img src="assets/images/footer/mir-logo.svg" alt="logo" />
+      <img src="assets/images/footer/mir-accept.png" alt="logo" />
     </div>
   </div>
 </footer>

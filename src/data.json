@@ -1,79 +1,82 @@
 {
-	"links": [
-		"Link 1",
-		"Link 2"
-	],
-	"footer": {
-		"leftMenuItems": [
-			{
-				"img": "info.png",
-				"links": [
-					{
-						"class": "script_about_company1",
-						"type": "text",
-						"text": "{{!about_company1}}"
-					},
-					{
-						"class": "script_about_company2",
-						"type": "text",
-						"text": "{{!about_company2}}"
-					},
-					{
-						"class": "script_about_company3",
-						"type": "text",
-						"text": "{{!about_company3}}"
-					}
-				]
-			},
-			{
-				"img": "phone.png",
-				"links": [
-					{
-						"class": "script_phone",
-						"type": "link",
-						"href": "tel: {{!phone}}",
-						"text": "{{!phone}}"
-					}
-				]
-			},
-			{
-				"img": "chat.png",
-				"links": [
-					{
-						"class": "script_chat",
-						"type": "link",
-						"href": "mailto: {{!email}}",
-						"text": "{{!email}}"
-					}
-				]
-			}
-		],
-		"rightMenuItems": [
-			{
-				"class": "script_offer",
-				"href": "{{!offer_file}}",
-				"text": "Оферта"
-			},
-			{
-				"class": "script_privacy",
-				"href": "{{!privacy_policy_file}}",
-				"text": "Политика конфиденциальности"
-			},
-			{
-				"class": "script_processing",
-				"href": "{{!data_processing_policy_file}}",
-				"text": "Политика обработки данных"
-			},
-			{
-				"class": "script_subscription",
-				"href": "/cabinet/#/subscription",
-				"text": "Отменить подписку"
-			},
-			{
-				"class": "script_tariff",
-				"href": "{{!tariff_file}}",
-				"text": "Тарифы"
-			}
-		]
-	}
+  "links": [
+    "Link 1",
+    "Link 2"
+  ],
+  "footer": {
+    "infoMenuItems": [
+      [
+        {
+          "class": "script_tariff footer__info-link__inline-block",
+          "href": "{{!tariff_file}}",
+          "text": "Тарифы"
+        },
+        {
+          "class": "script_offer footer__info-link__inline-block",
+          "href": "{{!offer_file}}",
+          "text": "Оферта"
+        },
+        {
+          "class": "script_subscription",
+          "href": "/cabinet/#/subscription",
+          "text": "Отменить подписку"
+        },
+        {
+          "class": "script_refund",
+          "href": "/cabinet/#/refund",
+          "text": "Возврат средств"
+        }
+      ],
+      [
+        {
+          "class": "script_faq",
+          "href": "/cabinet/#/faq",
+          "text": "Поддержка и FAQ"
+        },
+        {
+          "class": "script_processing",
+          "href": "{{!data_processing_policy_file}}",
+          "text": "Политика обработки данных"
+        },
+        {
+          "class": "script_privacy",
+          "href": "{{!privacy_policy_file}}",
+          "text": "Политика конфиденциальности"
+        }
+      ]
+    ],
+    "aboutCompanyMenuItems": [
+      {
+        "class": "script_about_company1",
+        "text": "{{!about_company1}}"
+      },
+      {
+        "class": "script_about_company2",
+        "text": "{{!about_company2}}"
+      },
+      {
+        "class": "script_about_company3",
+        "text": "{{!about_company3}}"
+      }
+    ],
+    "contactsMenuItems": [
+      {
+        "class": "script_chat",
+        "img": "chat.png",
+        "href": "mailto: {{!email}}",
+        "text": "{{!email}}"
+      },
+      {
+        "class": "script_phone",
+        "img": "phone.png",
+        "href": "tel: {{!phone}}",
+        "text": "{{!phone}}"
+      },
+      {
+        "class": "script_faq footer__contacts-link_big",
+        "href": "/cabinet/#/faq",
+        "text": "Написать нам"
+      }
+    ]
+  }
 }
