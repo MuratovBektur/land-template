@@ -1,0 +1,11 @@
+{
+    "type" : "easy",
+    "home_page" : "index",
+    "title" : "First preland",
+    "pages" : {
+        "index" : {
+            "path" : "index",
+            "title" : "hello world"
+        }
+    }
+}

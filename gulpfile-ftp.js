@@ -5,12 +5,17 @@ const del = require("del");
 const handlebars = require("gulp-compile-handlebars");
 const rename = require("gulp-rename");
 const fs = require("fs");
+const replace = require("gulp-replace");
+const beautify = require("gulp-jsbeautifier");
+const strip = require("gulp-strip-comments");
 
 const dataJsonPath = "src/data.json";
 
+const distFolder = "dist-ftp";
+
 // clean css style before updating style
 gulp.task("clean", function () {
-  return del(["dist/assets/style/main.css"]);
+  return del([`${distFolder}/assets/style/main.css`]);
 });
 
 gulp.task("styles", () =>
@@ -18,19 +23,34 @@ gulp.task("styles", () =>
     .src("src/scss/main.scss")
     .pipe(sass().on("error", sass.logError))
     .pipe(cleanCSS({ compatibility: "ie11" }))
-    .pipe(gulp.dest("dist/assets/style"))
+    .pipe(gulp.dest(`${distFolder}/assets/style`))
 );
+
+gulp.task("copy-vendor-styles", function () {
+  return gulp
+    .src("src/vendor-styles/*.css")
+    .pipe(gulp.dest(`${distFolder}/assets/style`));
+});
 
 gulp.task("copy-img", function () {
-  return gulp.src("src/images/**/*").pipe(gulp.dest("dist/assets/images"));
+  return gulp
+    .src("src/images/**/*")
+    .pipe(gulp.dest(`${distFolder}/assets/images/`));
 });
 
-gulp.task("copy-js", () =>
-  gulp.src("src/script/*.js").pipe(gulp.dest("dist/assets/script"))
-);
-gulp.task("copy-doc", function () {
-  return gulp.src("src/doc/*").pipe(gulp.dest("dist/assets/doc"));
+gulp.task("copy-js", function () {
+  return gulp
+    .src("src/script/*.js")
+    .pipe(strip())
+    .pipe(gulp.dest(`${distFolder}/assets/script`));
 });
+gulp.task("copy-doc", function () {
+  return gulp.src("src/doc/*").pipe(gulp.dest(`${distFolder}/assets/doc`));
+});
+gulp.task("copy-conf", function () {
+  return gulp.src("src/conf.json").pipe(gulp.dest(`${distFolder}/`));
+});
+
 gulp.task("template", () => {
   const templateData = JSON.parse(fs.readFileSync(dataJsonPath));
 
@@ -56,41 +76,37 @@ gulp.task("template", () => {
   };
 
   return gulp
-    .src("src/template/index.hbs")
+    .src("src/template/ftp/*.hbs")
     .pipe(handlebars(templateData, templateOptions))
-    .pipe(rename("index.html"))
-    .pipe(gulp.dest("dist"));
+    .pipe(
+      rename(function (path) {
+        path.extname = ".html";
+      })
+    )
+    .pipe(replace('<div class="template-content"></div>', "{{@content}}"))
+    .pipe(replace('<div class="payment-start"></div>', "{{@payment}}"))
+    .pipe(replace('<div class="payment-end"></div>', "{{@end-payment}}"))
+    .pipe(gulp.dest(`${distFolder}/`));
 });
 
-gulp.task("watch", () => {
-  gulp.watch("src/scss/*.scss", (done) => {
-    gulp.series(["clean", "styles"])(done);
-  });
-  gulp.watch("src/images/**/*", (done) => {
-    gulp.series(["copy-img"])(done);
-  });
-  gulp.watch("src/script/*.js", (done) => {
-    gulp.series(["copy-js"])(done);
-  });
-  gulp.watch("src/doc/*", (done) => {
-    gulp.series(["copy-doc"])(done);
-  });
-  gulp.watch("src/template/**/*", (done) => {
-    gulp.series(["template"])(done);
-  });
-  gulp.watch(dataJsonPath, (done) => {
-    gulp.series(["template"])(done);
-  });
-});
+gulp.task("beautify", () =>
+  gulp
+    .src(`${distFolder}/*.html`)
+    .pipe(beautify())
+    .pipe(gulp.dest(`${distFolder}`))
+);
 
 gulp.task(
   "default",
   gulp.series([
     "clean",
     "styles",
+    "copy-vendor-styles",
+    "copy-conf",
     "copy-img",
     "copy-js",
     "copy-doc",
     "template",
+    "beautify",
   ])
 );
